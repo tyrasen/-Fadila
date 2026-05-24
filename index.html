@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ô Fadila - Eau Pure du Burkina Faso</title>
+<link href="logo.jpeg">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --blue: #1a6b8a;
+    --blue-light: #d6eef5;
+    --green: #2d7a4f;
+    --green-light: #e0f2e9;
+    --teal: #1d9e75;
+    --white: #f9fdff;
+    --text: #1a2e3b;
+    --text-muted: #4a6b7a;
+    --accent: #0f6e56;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Lato', sans-serif; background: var(--white); color: var(--text); }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(249,253,255,0.97); backdrop-filter: blur(8px);
+    border-bottom: 1px solid #c8e8f5;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 1.2rem; height: 56px;
+  }
+  .logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--blue); letter-spacing: 1px; }
+  .logo span { color: var(--teal); }
+
+  .nav-links-desktop { display: none; list-style: none; gap: 2rem; }
+  .nav-links-desktop a { text-decoration: none; color: var(--text-muted); font-size: 0.9rem; transition: color 0.2s; }
+  .nav-links-desktop a:hover { color: var(--blue); }
+
+  .hamburger { display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 6px; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--blue); border-radius: 2px; transition: all 0.3s; }
+  .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+  .nav-menu {
+    position: fixed; top: 56px; left: 0; width: 100%;
+    background: rgba(249,253,255,0.98);
+    border-bottom: 1px solid #c8e8f5;
+    display: flex; flex-direction: column;
+    transform: translateY(-120%); transition: transform 0.3s ease;
+    z-index: 99;
+  }
+  .nav-menu.open { transform: translateY(0); }
+  .nav-menu a {
+    display: block; padding: 1rem 1.5rem;
+    text-decoration: none; color: var(--text);
+    font-size: 1rem; border-bottom: 1px solid #e8f5fb;
+    transition: background 0.15s;
+  }
+  .nav-menu a:hover { background: var(--blue-light); }
+
+  /* HERO */
+  #accueil {
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: linear-gradient(160deg, #e8f6fc 0%, #d0efe9 60%, #e0f2e9 100%);
+    padding: 80px 1.5rem 3rem; text-align: center; position: relative; overflow: hidden;
+  }
+  .hero-bg-circle { position: absolute; border-radius: 50%; opacity: 0.1; }
+  .hero-bg-circle.c1 { width: 320px; height: 320px; background: var(--blue); top: -80px; right: -80px; }
+  .hero-bg-circle.c2 { width: 200px; height: 200px; background: var(--teal); bottom: 0; left: -50px; }
+  .hero-tag { display: inline-block; background: var(--blue-light); color: var(--blue); font-size: 0.72rem; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 5px 12px; border-radius: 20px; margin-bottom: 1rem; }
+  .hero-img { width: 160px; height: 160px; object-fit: contain; margin-bottom: 1rem; }
+  .hero-content h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; line-height: 1.2; color: var(--text); margin-bottom: 1rem; }
+  .hero-content h1 em { color: var(--teal); font-style: normal; }
+  .hero-content p { font-size: 1rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 1.8rem; }
+  .hero-btns { display: flex; flex-direction: column; gap: 0.8rem; align-items: center; }
+  .btn { display: inline-block; padding: 13px 28px; border-radius: 50px; font-weight: 700; font-size: 0.95rem; text-decoration: none; transition: all 0.2s; cursor: pointer; border: none; text-align: center; width: 100%; max-width: 280px; }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-primary:hover { background: #145a75; }
+  .btn-outline { background: transparent; color: var(--teal); border: 2px solid var(--teal); }
+  .btn-outline:hover { background: var(--teal); color: white; }
+
+  /* SECTIONS */
+  section { padding: 3.5rem 1.5rem; }
+  .section-title { text-align: center; margin-bottom: 2rem; }
+  .section-title h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--text); margin-bottom: 0.5rem; }
+  .section-title p { color: var(--text-muted); font-size: 0.92rem; line-height: 1.7; max-width: 520px; margin: 0 auto; }
+  .section-title .underline { width: 50px; height: 3px; background: var(--teal); margin: 0.7rem auto 0; border-radius: 2px; }
+
+  /* À PROPOS */
+  #apropos { background: white; }
+  .apropos-text p { color: var(--text-muted); line-height: 1.9; margin-bottom: 0.9rem; font-size: 0.95rem; }
+  .apropos-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 1.5rem; }
+  .stat-card { background: var(--blue-light); border-radius: 12px; padding: 1.1rem; text-align: center; }
+  .stat-card .number { font-family: 'Playfair Display', serif; font-size: 1.7rem; color: var(--blue); font-weight: 700; }
+  .stat-card .label { font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
+
+  /* PRODUITS */
+  #produits { background: linear-gradient(180deg, #f0f9f5 0%, #e8f5fb 100%); }
+  .produits-grid { display: flex; flex-direction: column; gap: 1.2rem; max-width: 700px; margin: 0 auto; }
+  .produit-card {
+    background: white; border-radius: 16px; padding: 1.5rem;
+    box-shadow: 0 2px 12px rgba(26,107,138,0.08);
+    display: flex; align-items: flex-start; gap: 1rem;
+    border-left: 4px solid var(--teal);
+  }
+  .produit-icon {
+    min-width: 64px; width: 64px; height: 64px; border-radius: 12px;
+    overflow: hidden; flex-shrink: 0; background: #f0f9fc;
+  }
+  .produit-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .produit-info h3 { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--text); margin-bottom: 0.4rem; }
+  .produit-info p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 0.6rem; }
+  .produit-badge { display: inline-block; background: var(--green-light); color: var(--green); font-size: 0.72rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
+
+  /* GALERIE */
+  #galerie { background: white; }
+  .galerie-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; max-width: 700px; margin: 0 auto; }
+  .galerie-item {
+    border-radius: 12px; overflow: hidden; aspect-ratio: 1;
+  }
+  .galerie-item img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+
+  /* CONTACT */
+  #contact { background: linear-gradient(135deg, #e8f6fc, #d0efe9); }
+  .contact-box { background: white; border-radius: 16px; padding: 1.8rem 1.5rem; box-shadow: 0 4px 24px rgba(26,107,138,0.1); max-width: 700px; margin: 0 auto; }
+  .contact-infos { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.8rem; }
+  .contact-info-item { display: flex; align-items: flex-start; gap: 8px; }
+  .contact-icon { font-size: 1.1rem; min-width: 24px; }
+  .contact-info-item strong { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 1px; }
+  .contact-info-item span { color: var(--text); font-size: 0.85rem; }
+  .contact-form { display: flex; flex-direction: column; gap: 0.9rem; }
+  input, textarea {
+    width: 100%; padding: 12px 14px; border: 1.5px solid #c8e8f5;
+    border-radius: 10px; font-family: 'Lato', sans-serif; font-size: 0.95rem;
+    color: var(--text); background: var(--white);
+    outline: none; transition: border-color 0.2s;
+  }
+  input:focus, textarea:focus { border-color: var(--teal); }
+  textarea { resize: vertical; min-height: 90px; }
+  .btn-send {
+    background: var(--teal); color: white; padding: 14px; border-radius: 50px;
+    border: none; font-family: 'Lato', sans-serif; font-size: 1rem; font-weight: 700;
+    cursor: pointer; width: 100%; transition: all 0.2s;
+  }
+  .btn-send:hover { background: var(--accent); }
+
+  /* VIDEO */
+  #video { background: linear-gradient(160deg, #73c7b1 0%, #aec9d3 100%); }
+  #video .section-title h2 { color: white; }
+  #video .section-title p { color: #a0ccd8; }
+  #video .section-title .underline { background: var(--teal); }
+  .video-wrapper {
+    max-width: 820px; margin: 0 auto;
+    border-radius: 18px; overflow: hidden;
+    box-shadow: 0 8px 48px rgba(0,0,0,0.45);
+    position: relative; background: #000;
+  }
+  .video-wrapper video,
+  .video-wrapper iframe {
+    width: 100%; aspect-ratio: 16/9; display: block; border: none;
+  }
+  .video-placeholder {
+    width: 100%; aspect-ratio: 16/9;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: linear-gradient(135deg,#0d3d52,#1a6b8a);
+    color: white; gap: 1rem; cursor: pointer;
+  }
+  .video-placeholder .play-icon {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: rgba(255,255,255,0.15); backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; border: 2px solid rgba(255,255,255,0.3);
+    transition: transform 0.2s, background 0.2s;
+  }
+  .video-placeholder:hover .play-icon { transform: scale(1.1); background: rgba(255,255,255,0.25); }
+  .video-placeholder p { font-size: 0.95rem; opacity: 0.75; }
+  .video-caption { text-align: center; color: #7ab8cc; font-size: 0.82rem; margin-top: 1rem; }
+
+  /* WHATSAPP BUTTON */
+  .btn-send {
+    background: #25D366; color: white; padding: 14px; border-radius: 50px;
+    border: none; font-family: 'Lato', sans-serif; font-size: 1rem; font-weight: 700;
+    cursor: pointer; width: 100%; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .btn-send:hover { background: #1ebe5a; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(37,211,102,0.35); }
+  .btn-send svg { flex-shrink: 0; }
+
+  /* FOOTER */
+  footer { background: var(--text); color: #8ab0c2; text-align: center; padding: 1.5rem 1rem; font-size: 0.82rem; }
+  footer strong { color: white; }
+
+  /* DESKTOP */
+  @media (min-width: 768px) {
+    nav { padding: 0 2rem; height: 64px; }
+    .logo { font-size: 1.6rem; }
+    .hamburger { display: none; }
+    .nav-links-desktop { display: flex; }
+
+    #accueil { flex-direction: row; text-align: left; padding: 100px 4rem 4rem; justify-content: space-between; }
+    .hero-img { width: 220px; height: 220px; margin-bottom: 0; }
+    .hero-content h1 { font-size: 3.2rem; }
+    .hero-btns { flex-direction: row; }
+    .btn { width: auto; }
+
+    section { padding: 5rem 4rem; }
+    .section-title h2 { font-size: 2.2rem; }
+
+    .apropos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+
+    .galerie-grid { grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+
+    .video-placeholder .play-icon { width: 90px; height: 90px; font-size: 2.6rem; }
+    .contact-box { padding: 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Ô <span>Fadila</span></div>
+  <ul class="nav-links-desktop">
+    <li><a href="#accueil">Accueil</a></li>
+    <li><a href="#apropos">À propos</a></li>
+    <li><a href="#produits">Produits</a></li>
+    <li><a href="#video">Vidéo</a></li>
+    <li><a href="#galerie">Galerie</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="nav-menu" id="navMenu">
+  <a href="#accueil" onclick="closeMenu()"> Accueil</a>
+  <a href="#apropos" onclick="closeMenu()">ℹ À propos</a>
+  <a href="#produits" onclick="closeMenu()"> Produits</a>
+  <a href="#video" onclick="closeMenu()">▶️ Vidéo</a>
+  <a href="#galerie" onclick="closeMenu()"> Galerie</a>
+  <a href="#contact" onclick="closeMenu()"> Contact</a>
+</div>
+
+<!-- ============================================================
+     HERO — image principale (logo ou bouteille phare)
+     Remplace le src ci-dessous par ton chemin d'image, ex :
+       src="images/logo.png"
+       src="photos/bouteille-hero.jpg"
+     ============================================================ -->
+<section id="accueil">
+  <div class="hero-bg-circle c1"></div>
+  <div class="hero-bg-circle c2"></div>
+  <div class="hero-content">
+    <span class="hero-tag">💧 Eau pure — Burkina Faso</span>
+    <h1>L'eau <em>fraîche et pure</em> à portée de tous</h1>
+    <p>Ô Fadila vous offre une eau potable de qualité supérieure, en bouteilles et sachets, livrée partout au Burkina Faso. Parce que chaque goutte compte.</p>
+    <div class="hero-btns">
+      <a href="#produits" class="btn btn-primary">Nos produits</a>
+      <a href="#contact" class="btn btn-outline">Nous contacter</a>
+    </div>
+  </div>
+  <!-- IMAGE HERO : remplace le src -->
+  
+</section>
+
+<!-- À PROPOS -->
+<section id="apropos">
+  <div class="section-title">
+    <h2>À propos de nous</h2>
+    <div class="underline"></div>
+  </div>
+  <div class="apropos-grid">
+    <div class="apropos-text">
+      <p><strong>Ô Fadila</strong> est une entreprise burkinabè engagée dans la distribution d'eau potable saine et accessible à toutes les couches de la population.</p>
+      <p>Fondée avec la conviction que l'accès à l'eau pure est un droit fondamental, nous proposons des solutions adaptées : bouteilles pour les familles, sachets pour les particuliers, et livraisons pour les commerces.</p>
+      <p>Nos produits respectent les normes sanitaires les plus strictes pour garantir votre santé et votre bien-être au quotidien.</p>
+    </div>
+    <div class="apropos-stats">
+      <div class="stat-card"><div class="number">100%</div><div class="label">Eau purifiée certifiée</div></div>
+      <div class="stat-card"><div class="number">+500</div><div class="label">Clients satisfaits</div></div>
+      <div class="stat-card"><div class="number">7j/7</div><div class="label">Service disponible</div></div>
+      <div class="stat-card"><div class="number">BF</div><div class="label">Produit 100% local</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PRODUITS — une image par produit (64×64 px minimum)
+     Remplace chaque src par ton image, :
+       src="images/sachet.jpg"
+       src="images/bouteille-50cl.jpg"
+       src="images/bouteille-1L5.jpg"
+     ============================================================ -->
+<section id="produits">
+  <div class="section-title">
+    <h2>Nos produits</h2>
+    <p>Des solutions d'hydratation pour chaque besoin, à des prix accessibles.</p>
+    <div class="underline"></div>
+  </div>
+  <div class="produits-grid">
+
+    <div class="produit-card">
+      <!-- IMAGE PRODUIT 1 : remplace le src -->
+      <div class="produit-icon">
+        <img src="logo.jpeg" alt="Sachet d'eau">
+      </div>
+      <div class="produit-info">
+        <h3>Fadila </h3>
+        <p>Pratique et économique, le sachet est idéal pour une hydratation rapide au quotidien.</p>
+        <span class="produit-badge">Le plus populaire</span>
+      </div>
+    </div>
+
+    <div class="produit-card">
+      <!-- IMAGE PRODUIT 2 : remplace le src -->
+      <div class="produit-icon">
+        <img src="pt bt.jpg"Bouteille 0,5 L">
+      </div>
+      <div class="produit-info">
+        <h3>Bouteille 0,5 L</h3>
+        <p>Parfaite pour les déplacements, la bouteille individuelle garantit fraîcheur et pureté.</p>
+        <span class="produit-badge">Individuel</span>
+      </div>
+    </div>
+
+    <div class="produit-card">
+      <!-- IMAGE PRODUIT 3 : remplace le src -->
+      <div class="produit-icon">
+        <img src="GROSSE BOUTEILLE.jpg" alt="Bouteille 5 L">
+      </div>
+      <div class="produit-info">
+        <h3>Bouteille 5 L</h3>
+        <p>Idéale pour la famille, notre grande bouteille assure une hydratation tout au long de la journée.</p>
+        <span class="produit-badge">Familial</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- VIDEO PRÉSENTATION -->
+<section id="video">
+  <div class="section-title">
+    <h2>Notre produit en vidéo</h2>
+    <p>Découvrez l'eau Ô Fadila  de la source à votre table, la pureté à chaque étape.</p>
+    <div class="underline"></div>
+  </div>
+  <div class="video-wrapper">
+    <!--
+      ══════════════════════════════════════════════════════
+      OPTION A — Vidéo locale (fichier uploadé avec le site)
+        Remplace "ma-video.mp4" par ton chemin réel :
+        <video controls poster="images/video-cover.jpg">
+          <source src="ma-video.mp4" type="video/mp4">
+        </video>
+    -->
+    <video controls poster="images/video-cover.jpg">
+  <source src="video1.mp4" type="video/mp4">
+</video>
+
+  </div>
+  <p class="video-caption"> Ô Fadila — Eau potable pure, produite au Burkina Faso</p>
+</section>
+
+
+<section id="galerie">
+  <div class="section-title">
+    <h2>Galerie</h2>
+    <p>Ô fadila.</p>
+    <div class="underline"></div>
+  </div>
+  <div class="galerie-grid">
+
+    <!-- PHOTO GALERIE 1 -->
+    <div class="galerie-item">
+      <img src="eau pt bouteille .jpeg" alt="Photo 1">
+    </div>
+
+    <!-- PHOTO GALERIE 2 -->
+    <div class="galerie-item">
+      <img src="jus .jpeg" alt="Photo 2">
+    </div>
+
+    <!-- PHOTO GALERIE 3 -->
+    <div class="galerie-item">
+      <img src="GROSSE BOUTEILLE.jpg" alt="Photo 3">
+    </div>
+
+    <!-- PHOTO GALERIE 4 -->
+    <div class="galerie-item">
+      <img src="personel.jpg" alt="Photo 4">
+    </div>
+
+    <!-- PHOTO GALERIE 5 -->
+    <div class="galerie-item">
+      <img src="perso 2.jpg" alt="Photo 5">
+    </div>
+
+    <!-- PHOTO GALERIE 6 -->
+    <div class="galerie-item">
+      <img src="perso 3.jpg" alt="Photo 6">
+    </div>
+
+    <!-- PHOTO GALERIE 7 -->
+    <div class="galerie-item">
+      <img src="machine.jpg" alt="Photo 7">
+    </div>
+
+    <!-- PHOTO GALERIE 8 -->
+    <div class="galerie-item">
+      <img src="jus machine.jpeg" alt="Photo 8">
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-title">
+    <h2>Contactez-nous</h2>
+    <p>Passez commande ou posez-nous vos questions — nous répondons rapidement.</p>
+    <div class="underline"></div>
+  </div>
+  <div class="contact-box">
+    <div class="contact-infos">
+      <div class="contact-info-item">
+        <span class="contact-icon">📍</span>
+        <div><strong>Adresse</strong><span>Ouagadougou, Burkina Faso</span></div>
+      </div>
+      <div class="contact-info-item">
+        <span class="contact-icon">📞</span>
+        <div><strong>Téléphone</strong><span>+226 74 74 14 XX</span></div>
+      </div>
+      <div class="contact-info-item">
+        <span class="contact-icon">✉️</span>
+        <div><strong>Email</strong><span>ofadilacouriel@gmail.com</span></div>
+      </div>
+      <div class="contact-info-item">
+        <span class="contact-icon">🕐</span>
+        <div><strong>Horaires</strong><span>Lun – Sam : 7h – 20h</span></div>
+      </div>
+    </div>
+    <div class="contact-form">
+      <input type="text" id="contact-nom" placeholder="Votre nom" />
+      <input type="tel" id="contact-tel" placeholder="Votre téléphone" />
+      <input type="email" id="contact-email" placeholder="Votre email" />
+      <textarea id="contact-message" placeholder="Votre message ou commande..."></textarea>
+      <button class="btn-send" onclick="envoyerWhatsApp()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="white">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.558 4.122 1.532 5.856L.07 23.525a.5.5 0 0 0 .612.612l5.67-1.462A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.907 0-3.694-.504-5.23-1.383l-.374-.22-3.868.997.997-3.868-.22-.374A9.951 9.951 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+        </svg>
+        Envoyer via WhatsApp
+      </button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026<strong>Ô Fadila</strong> — Eau potable pure au Burkina Faso. Tous droits réservés.</p>
+</footer>
+
+<script>
+  function toggleMenu() {
+    document.getElementById('hamburger').classList.toggle('open');
+    document.getElementById('navMenu').classList.toggle('open');
+  }
+  function closeMenu() {
+    document.getElementById('hamburger').classList.remove('open');
+    document.getElementById('navMenu').classList.remove('open');
+  }
+
+  function envoyerWhatsApp() {
+    const nom     = document.getElementById('contact-nom').value.trim();
+    const tel     = document.getElementById('contact-tel').value.trim();
+    const email   = document.getElementById('contact-email').value.trim();
+    const message = document.getElementById('contact-message').value.trim();
+
+    if (!nom && !message) {
+      alert('Veuillez au moins saisir votre nom et votre message.');
+      return;
+    }
+
+    // ⚠️ Remplace le numéro ci-dessous par le vrai numéro WhatsApp Ô Fadila
+    // Format international sans +, espaces ni tirets  ex: 22674741400
+    const numeroWhatsApp = '22674741438';
+
+    let texte = '👋 Bonjour, je vous contacte depuis le site Ô Fadila.\n\n';
+    if (nom)     texte += `👤 Nom : ${nom}\n`;
+    if (tel)     texte += `📞 Téléphone : ${tel}\n`;
+    if (email)   texte += `✉️ Email : ${email}\n`;
+    if (message) texte += `\n💬 Message :\n${message}`;
+
+    const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(texte)}`;
+    window.open(url, '_blank');
+  }
+</script>
+
+</body>
+</html>
